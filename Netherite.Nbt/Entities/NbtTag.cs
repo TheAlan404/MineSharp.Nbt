@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Netherite.Nbt.Entities
 {
@@ -209,6 +210,9 @@ namespace Netherite.Nbt.Entities
 			};
 		}
 
+		public static NbtByte True => (NbtByte)(byte)0x01;
+		public static NbtByte False => (NbtByte)(byte)0x00;
+
 
 		internal static NbtTagType GetTagType<T>()
 		{
@@ -262,12 +266,33 @@ namespace Netherite.Nbt.Entities
 		/// <returns> A new NbtTag object that is a deep copy of this instance. </returns>
 		public abstract object Clone();
 
-		#region Print
+		#region SNBT
 
-		/// <summary> Prints contents of this tag, and any child tags, to a string.
-		/// Indents the string using multiples of the given indentation string. </summary>
-		/// <returns> A string representing contents of this tag, and all child tags (if any). </returns>
-		public override string ToString()
+		internal static Regex ShouldQuoteRegex = new Regex("^([0-9A-Za-z_\\-.+]+)$");
+		internal static string TryQuote(string s)
+		{
+			if (ShouldQuoteRegex.Match(s).Success)
+				return s;
+			else
+				return $"\"{s.Replace("\"", "\\\"")}\"";
+        }
+
+		public abstract string ToSNbt();
+
+
+		public static NbtTag FromSNbt(string data)
+		{
+			return new NbtCompound();
+		}
+
+        #endregion
+
+        #region Print
+
+        /// <summary> Prints contents of this tag, and any child tags, to a string.
+        /// Indents the string using multiples of the given indentation string. </summary>
+        /// <returns> A string representing contents of this tag, and all child tags (if any). </returns>
+        public override string ToString()
 			=> ToString(DefaultIndentString);
 
 		/// <summary> Prints contents of this tag, and any child tags, to a string.

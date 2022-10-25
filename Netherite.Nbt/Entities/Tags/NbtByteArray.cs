@@ -89,6 +89,11 @@ namespace Netherite.Nbt.Entities
 			sb.Append($"[{Value.Length} bytes]");
 		}
 
+		public override string ToSNbt()
+		{
+			return $"[B;{string.Join(",", Value.Select(b => $"{b}b"))}]";
+		}
+
 		public static implicit operator byte[](NbtByteArray nbt) => nbt.Value;
 		public static implicit operator List<byte>(NbtByteArray nbt) => nbt.Value.ToList();
 		public static implicit operator NbtByteArray(byte[] nbt) => new NbtByteArray(nbt);

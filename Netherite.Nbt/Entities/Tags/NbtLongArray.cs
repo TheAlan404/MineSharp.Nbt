@@ -92,7 +92,12 @@ namespace Netherite.Nbt.Entities
 			sb.AppendFormat($"[{Value.Length} longs]");
 		}
 
-		public static implicit operator long[](NbtLongArray nbt) => nbt.Value;
+        public override string ToSNbt()
+        {
+            return $"[L;{string.Join(",", Value.Select(l => $"{l}l"))}]";
+        }
+
+        public static implicit operator long[](NbtLongArray nbt) => nbt.Value;
 		public static implicit operator List<long>(NbtLongArray nbt) => nbt.Value.ToList();
 		public static implicit operator NbtLongArray(long[] nbt) => new NbtLongArray(nbt);
 		public static implicit operator NbtLongArray(List<long> nbt) => new NbtLongArray(nbt.ToArray());

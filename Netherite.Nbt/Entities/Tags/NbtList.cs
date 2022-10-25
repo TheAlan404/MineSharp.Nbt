@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Netherite.Nbt.Entities
@@ -142,6 +143,11 @@ namespace Netherite.Nbt.Entities
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return ((IEnumerable)Tags).GetEnumerator();
+		}
+
+		public override string ToSNbt()
+		{
+			return $"[{string.Join(",", Tags.Select(tag => tag.ToSNbt()))}]";
 		}
 
 		public static implicit operator NbtList(List<NbtTag> list) => new NbtList((IEnumerable<NbtTag>)list);

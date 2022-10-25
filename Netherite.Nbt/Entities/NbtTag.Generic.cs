@@ -69,7 +69,22 @@ namespace Netherite.Nbt.Entities
 			sb.Append(Value);
 		}
 
-		public static implicit operator NbtTag<T>(T value) => new NbtTag<T>(value);
+        public override string ToSNbt()
+		{
+			return TagType switch
+			{
+				NbtTagType.Byte => $"{Value}b",
+				NbtTagType.Double => $"{Value}d",
+				NbtTagType.Float => $"{Value}f",
+				NbtTagType.Int => $"{Value}",
+				NbtTagType.Long => $"{Value}l",
+				NbtTagType.Short => $"{Value}s",
+				// todo
+				_ => throw new Exception("Cannot convert to SNbt - converter missing"),
+			};
+		}
+
+        public static implicit operator NbtTag<T>(T value) => new NbtTag<T>(value);
 		public static implicit operator T?(NbtTag<T> nbt) => nbt.Value;
 	}
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Netherite.Nbt.Entities
@@ -241,7 +242,12 @@ namespace Netherite.Nbt.Entities
 			return ((IEnumerable)Tags).GetEnumerator();
 		}
 
-		public static implicit operator Dictionary<string, NbtTag>(NbtCompound nbt) => (Dictionary<string, NbtTag>)nbt.Tags;
+        public override string ToSNbt()
+        {
+            return $"{{{string.Join(",", Tags.Select(kvp => $"{TryQuote(kvp.Key)}:{kvp.Value.ToSNbt()}"))}}}";
+        }
+
+        public static implicit operator Dictionary<string, NbtTag>(NbtCompound nbt) => (Dictionary<string, NbtTag>)nbt.Tags;
         public static explicit operator NbtCompound(Dictionary<string, NbtTag> nbt) => new NbtCompound(nbt);
 	}
 }

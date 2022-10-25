@@ -71,6 +71,11 @@ namespace Netherite.Nbt.Entities
 			sb.Append($"'{Value}'");
 		}
 
+		public override string ToSNbt()
+		{
+			return $"\"{TryQuote(Value ?? "")}\"";
+		}
+
 		public static implicit operator string(NbtString nbt) => nbt.Value ?? "";
 		public static implicit operator NbtString(string nbt) => new NbtString(nbt);
 	}
